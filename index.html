@@ -2,8 +2,91 @@
 <html>
 <head>
   <title>賞味期限管理アプリ</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: #f9f9f9;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .danger {
+      background: #ffd6d6;
+    }
+
+    .warning {
+      background: #fff3cd;
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      width: auto;
+      padding: 5px 10px;
+    }
+
+    .delete-btn:hover {
+      background: #e60000;
+    }
+  </style>
+
 </head>
 <body>
+
+<div class="container">
 
   <h1>賞味期限管理</h1>
 
@@ -13,76 +96,70 @@
 
   <ul id="list"></ul>
 
- <script>
-  let items = [];
+</div>
 
-  function addItem() {
-    const name = document.getElementById("name").value;
-    const date = document.getElementById("date").value;
+<script>
+let items = [];
 
-    const item = { name, date };
-    items.push(item);
+function addItem() {
+  const name = document.getElementById("name").value;
+  const date = document.getElementById("date").value;
 
-    saveData();
+  const item = { name, date };
+  items.push(item);
+
+  saveData();
+  displayItems();
+}
+
+function displayItems() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  items.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  items.forEach((item, index) => {
+    const li = document.createElement("li");
+
+    const today = new Date();
+    const expiry = new Date(item.date);
+
+    const diffDays = (expiry - today) / (1000 * 60 * 60 * 24);
+
+    if (diffDays < 0) {
+      li.classList.add("danger");
+    } else if (diffDays <= 3) {
+      li.classList.add("warning");
+    }
+
+    li.innerHTML = `
+      ${item.name}（${item.date}）
+      <button class="delete-btn">削除</button>
+    `;
+
+    li.querySelector("button").onclick = () => {
+      items.splice(index, 1);
+      saveData();
+      displayItems();
+    };
+
+    list.appendChild(li);
+  });
+}
+
+function saveData() {
+  localStorage.setItem("items", JSON.stringify(items));
+}
+
+function loadData() {
+  const data = localStorage.getItem("items");
+  if (data) {
+    items = JSON.parse(data);
     displayItems();
   }
+}
 
-  function displayItems() {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-// 期限順に並び替え
-items.sort((a, b) => {
-  return new Date(a.date) - new Date(b.date);
-});
-items.forEach((item, index) => {
-  const li = document.createElement("li");
-
-  li.textContent = item.name + "（" + item.date + "） ";
-
-   // ===== 色の処理 =====
-  const today = new Date();
-  const expiry = new Date(item.date);
-
-  const diffTime = expiry - today;
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-  if (diffDays < 0) {
-    li.style.color = "red";
-  } else if (diffDays <= 3) {
-    li.style.color = "orange";
-  }
-
-
-  // 削除ボタン作る
-  const btn = document.createElement("button");
-  btn.textContent = "削除";
-
-  // ボタン押したとき
-  btn.onclick = () => {
-    items.splice(index, 1); // 配列から削除
-    saveData();             // 保存更新
-    displayItems();         // 再表示
-  };
-
-  li.appendChild(btn);
-  list.appendChild(li);
-});
-  }
-
-  function saveData() {
-    localStorage.setItem("items", JSON.stringify(items));
-  }
-
-  function loadData() {
-    const data = localStorage.getItem("items");
-    if (data) {
-      items = JSON.parse(data);
-      displayItems();
-    }
-  }
-
-  loadData();
+loadData();
 </script>
 
 </body>
