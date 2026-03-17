@@ -31,11 +31,43 @@
     const list = document.getElementById("list");
     list.innerHTML = "";
 
-    items.forEach(item => {
-      const li = document.createElement("li");
-      li.textContent = item.name + "（" + item.date + "）";
-      list.appendChild(li);
-    });
+// 期限順に並び替え
+items.sort((a, b) => {
+  return new Date(a.date) - new Date(b.date);
+});
+items.forEach((item, index) => {
+  const li = document.createElement("li");
+
+  li.textContent = item.name + "（" + item.date + "） ";
+
+   // ===== 色の処理 =====
+  const today = new Date();
+  const expiry = new Date(item.date);
+
+  const diffTime = expiry - today;
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  if (diffDays < 0) {
+    li.style.color = "red";
+  } else if (diffDays <= 3) {
+    li.style.color = "orange";
+  }
+
+
+  // 削除ボタン作る
+  const btn = document.createElement("button");
+  btn.textContent = "削除";
+
+  // ボタン押したとき
+  btn.onclick = () => {
+    items.splice(index, 1); // 配列から削除
+    saveData();             // 保存更新
+    displayItems();         // 再表示
+  };
+
+  li.appendChild(btn);
+  list.appendChild(li);
+});
   }
 
   function saveData() {
