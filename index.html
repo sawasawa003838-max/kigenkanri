@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>賞味期限管理アプリ</title>
+</head>
+<body>
+
+  <h1>賞味期限管理</h1>
+
+  <input id="name" placeholder="食品名">
+  <input id="date" type="date">
+  <button onclick="addItem()">追加</button>
+
+  <ul id="list"></ul>
+
+ <script>
+  let items = [];
+
+  function addItem() {
+    const name = document.getElementById("name").value;
+    const date = document.getElementById("date").value;
+
+    const item = { name, date };
+    items.push(item);
+
+    saveData();
+    displayItems();
+  }
+
+  function displayItems() {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    items.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.name + "（" + item.date + "）";
+      list.appendChild(li);
+    });
+  }
+
+  function saveData() {
+    localStorage.setItem("items", JSON.stringify(items));
+  }
+
+  function loadData() {
+    const data = localStorage.getItem("items");
+    if (data) {
+      items = JSON.parse(data);
+      displayItems();
+    }
+  }
+
+  loadData();
+</script>
+
+</body>
+</html>
