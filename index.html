@@ -1,21 +1,153 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>賞味期限管理アプリ</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoodStock | 賞味期限管理アプリ</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <div class="container">
-    <h1>賞味期限管理</h1>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Portfolio App</p>
+        <h1>FoodStock</h1>
+        <p class="hero-text">
+          食品の期限を見える化して、見落としを防ぐための賞味期限管理アプリです。
+          登録・検索・絞り込み・編集ができ、期限が近い食品をすぐ確認できます。
+        </p>
+      </div>
+    </header>
 
-    <input id="name" placeholder="食品名">
-    <input id="date" type="date">
-    <button onclick="addItem()">追加</button>
+    <main>
+      <section class="panel form-panel">
+        <h2>食品を登録する</h2>
 
-    <ul id="list"></ul>
+        <form id="item-form" class="item-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="item-name">食品名</label>
+              <input
+                type="text"
+                id="item-name"
+                placeholder="例：牛乳"
+                maxlength="30"
+              />
+            </div>
+
+            <div class="field">
+              <label for="item-category">カテゴリ</label>
+              <select id="item-category">
+                <option value="">選択してください</option>
+                <option value="冷蔵">冷蔵</option>
+                <option value="冷凍">冷凍</option>
+                <option value="常温">常温</option>
+                <option value="飲み物">飲み物</option>
+                <option value="調味料">調味料</option>
+                <option value="お菓子">お菓子</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="item-date">賞味期限</label>
+              <input type="date" id="item-date" />
+            </div>
+          </div>
+
+          <p id="form-error" class="form-error" aria-live="polite"></p>
+
+          <div class="form-actions">
+            <button type="submit" id="submit-button" class="primary-button">追加する</button>
+            <button type="button" id="cancel-edit-button" class="secondary-button hidden">
+              編集をやめる
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <p class="stat-label">登録件数</p>
+          <p id="total-count" class="stat-number">0</p>
+        </article>
+
+        <article class="stat-card">
+          <p class="stat-label">期限切れ</p>
+          <p id="expired-count" class="stat-number">0</p>
+        </article>
+
+        <article class="stat-card">
+          <p class="stat-label">3日以内</p>
+          <p id="warning-count" class="stat-number">0</p>
+        </article>
+
+        <article class="stat-card">
+          <p class="stat-label">今日まで</p>
+          <p id="today-count" class="stat-number">0</p>
+        </article>
+      </section>
+
+      <section class="panel control-panel">
+        <div class="control-row">
+          <div class="field control-field">
+            <label for="search-input">検索</label>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="食品名で検索"
+            />
+          </div>
+
+          <div class="field control-field">
+            <label for="category-filter">カテゴリ絞り込み</label>
+            <select id="category-filter">
+              <option value="すべて">すべて</option>
+              <option value="冷蔵">冷蔵</option>
+              <option value="冷凍">冷凍</option>
+              <option value="常温">常温</option>
+              <option value="飲み物">飲み物</option>
+              <option value="調味料">調味料</option>
+              <option value="お菓子">お菓子</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+
+          <div class="field control-field">
+            <label for="sort-select">並び替え</label>
+            <select id="sort-select">
+              <option value="deadline-asc">期限が近い順</option>
+              <option value="deadline-desc">期限が遠い順</option>
+              <option value="name-asc">名前順</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-buttons">
+          <button type="button" class="filter-button active" data-filter="すべて">すべて</button>
+          <button type="button" class="filter-button" data-filter="期限切れ">期限切れ</button>
+          <button type="button" class="filter-button" data-filter="今日まで">今日まで</button>
+          <button type="button" class="filter-button" data-filter="3日以内">3日以内</button>
+          <button type="button" class="filter-button" data-filter="1週間以内">1週間以内</button>
+        </div>
+      </section>
+
+      <section class="panel list-panel">
+        <div class="list-header">
+          <h2>食品一覧</h2>
+          <button type="button" id="delete-all-button" class="danger-button">
+            すべて削除
+          </button>
+        </div>
+
+        <ul id="item-list" class="item-list"></ul>
+
+        <div id="empty-state" class="empty-state">
+          <p class="empty-title">まだ食品が登録されていません</p>
+          <p class="empty-text">上のフォームから食品名・カテゴリ・賞味期限を入力して追加してください。</p>
+        </div>
+      </section>
+    </main>
   </div>
 
   <script src="script.js"></script>
