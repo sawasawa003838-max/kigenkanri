@@ -92,13 +92,13 @@ function handleSubmit(event) {
 
   let deadline = "";
 
-  // 手動入力が最優先
+  // 期限日を直接入力した場合は、その値を優先する
   if (manualDeadline) {
     deadline = manualDeadline;
   } else if (openDate && storageDays) {
     deadline = calculateExpiry(openDate, storageDays);
   } else {
-    showError("賞味期限を手動入力するか、開封日と保存日数を入力してください。");
+    showError("期限日を直接入力するか、開封日と保存日数を入力してください。");
     return;
   }
 
@@ -318,7 +318,7 @@ function renderList(list) {
         }
 
         <div class="meta-box">
-          <span class="meta-label">賞味期限</span>
+          <span class="meta-label">期限日</span>
           <span class="meta-value">${formatDate(item.deadline)}</span>
         </div>
 
@@ -328,7 +328,7 @@ function renderList(list) {
         </div>
 
         <div class="meta-box">
-          <span class="meta-label">登録状態</span>
+          <span class="meta-label">状態</span>
           <span class="meta-value">${statusInfo.shortText}</span>
         </div>
       </div>
@@ -491,7 +491,7 @@ function getStatusInfo(daysLeft) {
   if (daysLeft < 0) {
     return {
       label: "期限切れ",
-      shortText: "早めに確認が必要",
+      shortText: "すでに期限を過ぎています",
       cardClass: "expired",
       badgeClass: "badge-expired",
     };
@@ -500,7 +500,7 @@ function getStatusInfo(daysLeft) {
   if (daysLeft === 0) {
     return {
       label: "今日まで",
-      shortText: "本日が期限",
+      shortText: "本日が期限です",
       cardClass: "today",
       badgeClass: "badge-today",
     };
@@ -509,15 +509,15 @@ function getStatusInfo(daysLeft) {
   if (daysLeft <= 3) {
     return {
       label: "3日以内",
-      shortText: "期限が近い",
+      shortText: "期限が近づいています",
       cardClass: "warning",
       badgeClass: "badge-warning",
     };
   }
 
   return {
-    label: "余裕あり",
-    shortText: "まだ余裕あり",
+    label: "安全",
+    shortText: "まだ余裕があります",
     cardClass: "safe",
     badgeClass: "badge-safe",
   };
@@ -525,7 +525,7 @@ function getStatusInfo(daysLeft) {
 
 function formatDaysLeft(daysLeft) {
   if (daysLeft < 0) {
-    return `${Math.abs(daysLeft)}日超過`;
+    return `${Math.abs(daysLeft)}日前`;
   }
 
   if (daysLeft === 0) {

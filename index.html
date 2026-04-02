@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FoodStock | 賞味期限管理アプリ</title>
+  <title>FoodStock | 食品期限管理アプリ</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,8 +13,8 @@
         <p class="eyebrow">Portfolio App</p>
         <h1>FoodStock</h1>
         <p class="hero-text">
-          食品の期限を見える化して、見落としを防ぐための賞味期限管理アプリです。
-          登録・検索・絞り込み・編集ができ、期限が近い食品をすぐ確認できます。
+          食品の賞味期限や消費期限を見える化して、買いすぎや期限切れを防ぐための食品管理アプリです。
+          登録・検索・絞り込み・編集ができ、期限が近い食品をひと目で確認できます。
         </p>
       </div>
     </header>
@@ -24,22 +24,22 @@
         <h2>食品を登録する</h2>
 
         <form id="item-form" class="item-form">
-          <div class="field-grid">
+          <div class="form-grid">
             <div class="field">
               <label for="item-name">食品名</label>
-              <input type="text" id="item-name" placeholder="例：牛乳" />
+              <input type="text" id="item-name" placeholder="例: 牛乳" />
             </div>
 
             <div class="field">
               <label for="item-category">カテゴリ</label>
               <select id="item-category">
                 <option value="">選択してください</option>
-                <option value="冷蔵">冷蔵</option>
-                <option value="冷凍">冷凍</option>
-                <option value="常温">常温</option>
-                <option value="飲み物">飲み物</option>
+                <option value="野菜">野菜</option>
+                <option value="肉類">肉類</option>
+                <option value="飲料">飲料</option>
+                <option value="冷凍食品">冷凍食品</option>
                 <option value="調味料">調味料</option>
-                <option value="お菓子">お菓子</option>
+                <option value="乳製品">乳製品</option>
                 <option value="その他">その他</option>
               </select>
             </div>
@@ -50,7 +50,7 @@
             </div>
 
             <div class="field">
-              <label for="storage-days-select">保存日数（よく使う設定）</label>
+              <label for="storage-days-select">保存日数を選ぶ</label>
               <select id="storage-days-select">
                 <option value="">選択してください</option>
                 <option value="30">30日</option>
@@ -60,26 +60,26 @@
             </div>
 
             <div class="field">
-              <label for="custom-days">保存日数を自由入力</label>
+              <label for="custom-days">保存日数を自分で入力</label>
               <input
                 type="number"
                 id="custom-days"
                 min="1"
-                placeholder="例：45"
+                placeholder="例: 5"
               />
-              <small class="form-hint">入力があればこちらを優先します</small>
+              <small class="form-hint">入力があればこちらを優先します。</small>
             </div>
 
             <div class="field">
-              <label for="item-date">賞味期限（手動入力）</label>
+              <label for="item-date">期限日を直接入力</label>
               <input type="date" id="item-date" />
-              <small class="form-hint">手動で入力した場合は、こちらを優先します</small>
+              <small class="form-hint">期限日を直接入力した場合は、こちらを優先します。</small>
             </div>
           </div>
 
           <p class="form-note">
-            開封日＋保存日数から賞味期限を自動計算できます。<br />
-            例外がある場合は、賞味期限を手動で入力してください。
+            開封日と保存日数から期限日を自動で計算できます。<br />
+            期限日がわかっている場合は、期限日を直接入力してください。
           </p>
 
           <p id="form-error" class="form-error" aria-live="polite"></p>
@@ -133,15 +133,15 @@
           </div>
 
           <div class="field control-field">
-            <label for="category-filter">カテゴリ絞り込み</label>
+            <label for="category-filter">カテゴリで絞り込み</label>
             <select id="category-filter">
               <option value="すべて">すべて</option>
-              <option value="冷蔵">冷蔵</option>
-              <option value="冷凍">冷凍</option>
-              <option value="常温">常温</option>
-              <option value="飲み物">飲み物</option>
+              <option value="野菜">野菜</option>
+              <option value="肉類">肉類</option>
+              <option value="飲料">飲料</option>
+              <option value="冷凍食品">冷凍食品</option>
               <option value="調味料">調味料</option>
-              <option value="お菓子">お菓子</option>
+              <option value="乳製品">乳製品</option>
               <option value="その他">その他</option>
             </select>
           </div>
@@ -178,7 +178,7 @@
         <div id="empty-state" class="empty-state">
           <p class="empty-title">まだ食品が登録されていません</p>
           <p class="empty-text">
-            上のフォームから食品名・カテゴリ・賞味期限を入力して追加してください。
+            上のフォームから食品名・カテゴリ・期限日を入力して追加してください。
           </p>
         </div>
       </section>
